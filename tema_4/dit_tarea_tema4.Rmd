@@ -1,0 +1,22 @@
+---
+title: "Tarea del tema 4"
+author: "Pablo Hidalgo García"
+output: html_notebook
+---
+
+El *part-of-speech tagging* o etiquetado de parte de la oración consiste en asignar a cada token (palabra) a qué categoría gramatical pertenece, es decir, si se trata de un verbo, nombre, pronombre, etcétera. Este etiquetado tiene que lidiar con diversos problemas, entre ellos el de la ambigüedad gramatical ya que hay palabras con una misma grafía pero que pueden pertenecer a categorías gramaticales distintas en función de la parte de la oración en la que aparezca y las palabras adyacentes.
+
+Existen diferentes técnicas que permiten hacer este etiquetado de forma automática y que difieren en el modelo matemático empleado para ello. En la web [link](https://nlp.stanford.edu/links/statnlp.html#Taggers) aparecen herramientas asociadas con distintos modelos para hacer esta tarea.
+
+Vamos a comparar dos de ellos:
+
+- Stanford POS Tagger
+- TreeTagger
+
+A continuación se describirán las principales características de ambos y se compararán sus resultados a través del etiquetado del siguiente texto extraido de BLABLABLA corpus
+
+
+# Stanford POS Tagger
+
+
+
