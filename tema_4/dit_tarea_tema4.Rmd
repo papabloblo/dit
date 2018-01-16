@@ -18,5 +18,16 @@ A continuación se describirán las principales características de ambos y se c
 
 # Stanford POS Tagger
 
+El problema del etiquetado gramatical se puede abordar desde distintas perspectivas. Una de ellas es desde el **punto de vista estocástico** en el que, dada una sucesión de palabras $w_1, w_2, \ldots, w_n$ se trata de encontrar aquella sucesión de etiquetas $t_1, t_2, \ldots, t_n$ tales que
 
+$$
+  t^*=\underset{t_1, \ldots, t_n}{argmax} P(t_1, t_2, \ldots, t_n|w_1, w_2, \ldots, w_n)
+$$
 
+Cada modelo matemático intenta resolver este problema suponiendo una serie de hipótesis. Por ejemplo, podemos suponer que cada etiqueta depende únicamente de las 2 etiquetas anteriores (modelo de Markov de segundo orden) y que, por tanto, la probabilidad conjunta de una secuencia de palabras y de etiquetas se puede factorizar recursivamente como
+
+$$
+P(w_1, w_2, \ldots, w_n, t_1, t_2, \ldots, t_n) = P(t_n|t_{n-2}, t_{n-1})P(w_n|t_n)P(w_1, w_2, \ldots, w_{n-1}, t_1, t_2, \ldots, t_{n-1})
+$$
+
+En el caso 
