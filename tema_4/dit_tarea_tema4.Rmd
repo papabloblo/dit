@@ -16,7 +16,7 @@ Vamos a comparar dos de ellos:
 A continuación se describirán las principales características de ambos y se compararán sus resultados a través del etiquetado del siguiente texto extraido de BLABLABLA corpus
 
 
-# Stanford POS Tagger
+# TreeTagger
 
 El problema del etiquetado gramatical se puede abordar desde distintas perspectivas. Una de ellas es desde el **punto de vista estocástico** en el que, dada una sucesión de palabras $w_1, w_2, \ldots, w_n$ se trata de encontrar aquella sucesión de etiquetas $t_1, t_2, \ldots, t_n$ tal que
 
