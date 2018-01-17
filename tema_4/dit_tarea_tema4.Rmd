@@ -40,4 +40,6 @@ Sin embargo, el modelo **TreeTagger** estima esas probabilidades de transición 
 
 Por ejemplo, vamos a seguir la estructura de árbol propuesta en la figura BLA para hallar la probabilidad de que un nombre sea precedido por un determinante y un adjetivo $P(NN|DET,ADJ)$. El nodo raíz pregunta si la etiqueta $t_{n-1}$ es un adjetivo que en nuestro caso es correcto por lo que seguimos la rama que se corresponde con *yes*. La siguiente pregunta es si $t_{n-2}$ es un determinante que, al serlo, seguimos la rama *yes* que nos lleva a un nodo terminal, especificando que la probabilidad de obtener un nombre dadas las condiciones anteriores es del $0.7$.
 
+# Stanford POS Tagger
 
+Habitualmente, los modelos para realizar las tareas de POS tagging, siguen una estructura unidreccional que suele ser *de izquierda a derecha*, es decir, se supone que la etiqueta $t_n$ depende de $n$ etiquetas (y palabras) anteriores. Sin embargo, parece lógico pensar que la etiqueta de una palabra no solo dependerá de las palabras y etiquetas precedentes sino también de las posteriores.
