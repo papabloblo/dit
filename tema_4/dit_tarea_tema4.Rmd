@@ -1,27 +1,59 @@
 ---
 title: "Tarea del tema 4"
 author: "Pablo Hidalgo García"
-output: html_notebook
+output:
+  pdf_document: default
+  html_notebook: default
 ---
 
 El *part-of-speech tagging* o etiquetado de parte de la oración consiste en asignar a cada token (palabra) a qué categoría gramatical pertenece, es decir, si se trata de un verbo, nombre, pronombre, etcétera. Este etiquetado tiene que lidiar con diversos problemas, entre ellos el de la ambigüedad gramatical ya que hay palabras con una misma grafía pero que pueden pertenecer a categorías gramaticales distintas en función de la parte de la oración en la que aparezca y las palabras adyacentes.
 
-Existen diferentes técnicas que permiten hacer este etiquetado de forma automática y que difieren en el modelo matemático empleado para ello. En la web [link](https://nlp.stanford.edu/links/statnlp.html#Taggers) aparecen herramientas asociadas con distintos modelos para hacer esta tarea.
+Existen diferentes técnicas que permiten hacer este etiquetado de forma automática y que difieren en el modelo matemático empleado para ello. En la web https://nlp.stanford.edu/links/statnlp.html#Taggers aparecen herramientas asociadas con distintos modelos para hacer esta tarea.
 
 Vamos a comparar dos de ellos:
 
 - Stanford POS Tagger
 - TreeTagger
 
-A continuación se describirán las principales características de ambos y se compararán sus resultados a través del etiquetado del siguiente texto extraido de BLABLABLA corpus
+A continuación se describen las principales características de ambos y se comparan sus resultados a través del etiquetado del siguiente **texto extraido de Corpus de Brown**:
+
+> On their way, they stopped at every gas station along the main boulevards to question the attendants.
+
+> Finally, at Ye Olde Gasse Filling Station on Avocado Avenue, they learnedd that their man, having paused to get oil for his car, had asked about the route to San Diego.
+They headedd in that direction and, at San Juan Capistrano By-the-Sea camed upon Barco sittingg in the quaint old Spanish Mission Drive, eatingg a hot tamale.
+At the moment, Barco's back was to the road so he didn't see the detectivess close in on his convertible which, in their quest for the stolenn lap rug, they proceededd to search.
+The robe, however, was missingg, for by that time Barco had disposedn of it at a pawnshop in Glendale.
+
+> The detectives placed Barco under arrestand, without informing him of the natureof the charge, took him back to Hollywood for questioning.
+
+> Thus it was that Barco, apprehended for mere larceny, now began to suspect that one or another of his murders had been uncovered.
+During the returntrip, Barco kept muttering to himself in meaningless phrases, such as: They're under sanddunes They're
+better off, I tell you I saved their souls.
+The detective, commenting on Barco's behavior, felt that he merely belonged among the myriad citizens of our community who are mentally unhinged -- that he was a more or less harmless!
+
+
+Cuyo etiquetado realizado en este corpus es el siguiente:
+
+> On/in their/pp$ way,/, they/ppss stopped/vbd at/in every/at gasstationalong/in the/at mainboulevards/nns to/to question/vb the/at attendants/nns ./.
+> Finally/rb ,/, at/in Ye/at-tl Olde/jj Gasse/nn-tl Filling/vbg-tl Station/nn-tl on/in Avocado/nn-tl Avenue/nn-tl ,/, they/ppss learned/vbd that/cs their/pp$ man,/, having/hvg paused/vbn to/to get/vb oilfor/in his/pp$ car,/, had/hvd asked/vbn about/in the/at routeto/in San/np Diego/np ./.
+They/ppss headed/vbd in/in that/dt directionand/cc ,/, at/in San/np Juan/np Capistrano/np By-the-Sea/np came/vbd upon/in Barco/np sitting/vbg in/in the/at quaint/jj old/jj Spanish/jj-tl Mission/nn-tl Drive-in/nn-tl ,/, eating/vbg a/at hot/jj tamale./.
+At/in the/at moment,/, Barco's/np$ backwas/bedz to/in the/at roadso/cs he/pps didn't/dod* see/vb the/at detectives/nns close/vb in/rp on/in his/pp$ convertiblewhich/wdt ,/, in/in their/pp$ questfor/in the/at stolen/vbn laprug,/, they/ppss proceeded/vbd to/to search/vb ./.
+The/at robe,/, however/wrb ,/, was/bedz missing/vbg ,/, for/cs by/in that/dt timeBarco/np had/hvd disposed/vbn of/in it/ppo at/in a/at pawnshopin/in Glendale/np ./.
+
+> The/at detectives/nns placed/vbd Barco/np under/in arrestand/cc ,/, without/in informing/vbg him/ppo of/in the/at natureof/in the/at charge,/, took/vbd him/ppo back/rb to/in Hollywood/np for/in questioning/vbg ./.
+
+
+> Thus/rb it/pps was/bedz that/cs Barco/np ,/, apprehended/vbn for/in mere/jj larceny,/, now/rb began/vbd to/to suspect/vb that/cs one/pn or/cc another/dt of/in his/pp$ murders/nns had/hvd been/ben uncovered/vbn ./.
+During/in the/at returntrip,/, Barco/np kept/vbd muttering/vbg to/in himself/ppl in/in meaningless/jj phrases/nns ,/, such/jj as/cs :``/`` They're/ppss+ber under/in sanddunes/nns They're/ppss+ber better/rbr off/rp ,/, I/ppss tell/vb you/ppo I/ppss saved/vbd their/pp$ souls/nns ''/'' ./.
+The/at detective,/, commenting/vbg on/in Barco's/np$ behavior,/, felt/vbd that/cs he/pps merely/rb belonged/vbd among/in the/at myriad/jj citizens/nns of/in our/pp$ communitywho/wps are/ber mentally/rb unhinged/vbn --/-- that/cs he/pps was/bedz a/at more/ql or/cc less/ql harmless/jj ``/`` nut''/'' !/. !/.
 
 
 # TreeTagger
 
-El problema del etiquetado gramatical se puede abordar desde distintas perspectivas. Una de ellas es desde el **punto de vista estocástico** en el que, dada una sucesión de palabras $w_1, w_2, \ldots, w_n$ se trata de encontrar aquella sucesión de etiquetas $t_1, t_2, \ldots, t_n$ tal que
+El problema del etiquetado gramatical se puede abordar desde distintas perspectivas como los etiquetadores basados en reglas, los estocásticos y una mezcla de ambos. Desde el **punto de vista estocástico** dada una sucesión de palabras $w_1, w_2, \ldots, w_n$ se trata de encontrar aquella sucesión de etiquetas $t_1, t_2, \ldots, t_n$ tal que
 
 $$
-  t^*=\underset{t_1, \ldots, t_n}{argmax} P(t_1, t_2, \ldots, t_n|w_1, w_2, \ldots, w_n)
+  t^*=\underset{t_1, \ldots, t_n}{argmax} \, P(t_1, t_2, \ldots, t_n|w_1, w_2, \ldots, w_n)
 $$
 
 Cada modelo matemático intenta resolver este problema suponiendo una serie de hipótesis. Por ejemplo, podemos suponer que cada etiqueta depende únicamente de las etiquetas de las dos palabras anteriores (modelo de Markov de segundo orden) y que, por tanto, la probabilidad conjunta de una secuencia de palabras y de etiquetas se puede factorizar recursivamente como
@@ -36,9 +68,11 @@ P(t_n|t_{n-2}, t_{n-1})=\frac{F(t_{n-2}, t_{n-1}, t_n)}{F(t_{n-2},t_{n-1})}
 $$
 siendo $F(t_{n-2}, t_{n-1}, t_n)$ el número de veces que ocurre el trigrama $t_{n-2}, t_{n-1}, t_n$ dentro del corpus usado como entrenamiento y $F(t_{n-2},t_{n-1})$ el número de veces que ocurre el bigrama $t_{n-2}, t_{n-1}$.
 
-Sin embargo, el modelo **TreeTagger** estima esas probabilidades de transición con un **árbol de decisión binario**. Los árboles de decisión son modelos muy utilizados en el área de la minería de datos por su sencillez de ser explicados. Consisten en una serie de reglas que siguen una estructura jerárquica donde se parte de un nodo inicial o raíz y se va particionando siguiendo una estructura de árbol como puede verse en la figura BLA. La probabilidad de un trigrama (en general, un ngrama) se determina siguiendo el camino correspondiente en el árbol de decisión construido hasta que se llega a una hoja (nodo terminal).
+Sin embargo, el modelo **TreeTagger** estima esas probabilidades de transición con un **árbol de decisión binario**. Los árboles de decisión son modelos muy utilizados en el área de la minería de datos por su sencillez y porque suelen permitir una interpretación explicativa de cómo se comportan las variables que intervienen en el modelo. Consisten en una serie de reglas que siguen una estructura jerárquica donde se parte de un nodo inicial o raíz y se va particionando siguiendo una estructura de árbol como puede verse en la figura BLA. La probabilidad de un trigrama (en general, un ngrama) se determina siguiendo el camino correspondiente en el árbol de decisión construido hasta que se llega a una hoja (nodo terminal).
 
 Por ejemplo, vamos a seguir la estructura de árbol propuesta en la figura BLA para hallar la probabilidad de que un nombre sea precedido por un determinante y un adjetivo $P(NN|DET,ADJ)$. El nodo raíz pregunta si la etiqueta $t_{n-1}$ es un adjetivo que en nuestro caso es correcto por lo que seguimos la rama que se corresponde con *yes*. La siguiente pregunta es si $t_{n-2}$ es un determinante que, al serlo, seguimos la rama *yes* que nos lleva a un nodo terminal, especificando que la probabilidad de obtener un nombre dadas las condiciones anteriores es del $0.7$.
+
+En la web http://www.cis.uni-muenchen.de/~schmid/tools/TreeTaggerse pueden encontrar todos los detalles acerca de este método de POS tagging así como descargar el programa que permite hacer este etiquetado.
 
 # Stanford POS Tagger
 
