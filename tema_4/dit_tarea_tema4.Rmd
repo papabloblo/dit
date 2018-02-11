@@ -2,20 +2,20 @@
 title: "Tarea del tema 4"
 author: "Pablo Hidalgo García"
 output:
-  pdf_document: default
-  html_notebook: default
+  pdf_document: 
+    fig_caption: yes
 ---
 
-El *part-of-speech tagging* o etiquetado de parte de la oración consiste en asignar a cada token (palabra) a qué categoría gramatical pertenece, es decir, si se trata de un verbo, nombre, pronombre, etcétera. Este etiquetado tiene que lidiar con diversos problemas, entre ellos el de la ambigüedad gramatical ya que hay palabras con una misma grafía pero que pueden pertenecer a categorías gramaticales distintas en función de la parte de la oración en la que aparezca y las palabras adyacentes.
+El *part-of-speech tagging* o etiquetado de parte de la oración consiste en asignar a cada token (palabra) a qué categoría gramatical pertenece, es decir, si se trata de un verbo, nombre, pronombre, etcétera. Este etiquetado tiene que lidiar con diversos problemas, entre ellos el de la ambigüedad gramatical ya que hay palabras con una misma grafía pero que pueden pertenecer a categorías gramaticales distintas en función de la parte de la oración en la que aparezca, las palabras adyacentes y el contexto.
 
-Existen diferentes técnicas que permiten hacer este etiquetado de forma automática y que difieren en el modelo matemático empleado para ello. En la web https://nlp.stanford.edu/links/statnlp.html#Taggers aparecen herramientas asociadas con distintos modelos para hacer esta tarea.
+Existen diferentes técnicas que permiten hacer este etiquetado de forma automática y que difieren en las hipótesis en las que se basa el modelo matemático empleado. En la web https://nlp.stanford.edu/links/statnlp.html#Taggers aparecen herramientas asociadas con distintos modelos para hacer esta tarea.
 
 Vamos a comparar dos de ellos:
 
 - Stanford POS Tagger
 - TreeTagger
 
-A continuación se describen las principales características de ambos y se comparan sus resultados a través del etiquetado del siguiente **texto extraido de Corpus de Brown**:
+Este trabajo consiste en la descripción de las principales características de ambos y en la comparación de los resultados para comprobar, por ejemplo, la precisión del etiquetado. Estos resultados se estudiarán a través del etiquetado del siguiente **texto extraído de Corpus de Brown**:
 
 > On their way, they stopped at every gas station along the main boulevards to question the attendants.
 
@@ -50,14 +50,19 @@ The/at detective,/, commenting/vbg on/in Barco's/np$ behavior,/, felt/vbd that/c
 
 # TreeTagger
 
-El problema del etiquetado gramatical se puede abordar desde distintas perspectivas como los etiquetadores basados en reglas, los estocásticos y una mezcla de ambos. Desde el **punto de vista estocástico** dada una sucesión de palabras $w_1, w_2, \ldots, w_n$ se trata de encontrar aquella sucesión de etiquetas $t_1, t_2, \ldots, t_n$ tal que
+El problema del etiquetado gramatical (*POS*) se puede abordar desde distintas perspectivas:  etiquetadores basados en reglas, estocásticos y una mezcla de ambos. Desde el **punto de vista estocástico** dada una sucesión de palabras $w_1, w_2, \ldots, w_n$ se trata de encontrar aquella sucesión de etiquetas $t_1, t_2, \ldots, t_n$ tal que
 
 $$
   t^*=\underset{t_1, \ldots, t_n}{argmax} \, P(t_1, t_2, \ldots, t_n|w_1, w_2, \ldots, w_n)
 $$
 
-Cada modelo matemático intenta resolver este problema suponiendo una serie de hipótesis. Por ejemplo, podemos suponer que cada etiqueta depende únicamente de las etiquetas de las dos palabras anteriores (modelo de Markov de segundo orden) y que, por tanto, la probabilidad conjunta de una secuencia de palabras y de etiquetas se puede factorizar recursivamente como
+Por definición, la probabilidad condicionada anterior se expresa como
 
+$$
+P(t_1, t_2, \ldots, t_n|w_1, w_2, \ldots, w_n) = \frac{P(t_1, t_2, \ldots, t_n, w_1, w_2, \ldots, w_n)}{P(w_1, w_2, \ldots, w_n)}
+$$
+
+Cada modelo matemático intenta resolver este problema suponiendo una serie de hipótesis. Por ejemplo, los etiquetadores de ngramas convencionales estiman la probabilidad conjunta de una secuencia de palabras y de etiquetas (suponiendo que cada etiqueta depende únicamente de las etiquetas de las dos palabras anteriores, es decir, un modelo de Markov de segundo orden) como 
 $$
 P(w_1, w_2, \ldots, w_n, t_1, t_2, \ldots, t_n) = P(t_n|t_{n-2}, t_{n-1})P(w_n|t_n)P(w_1, w_2, \ldots, w_{n-1}, t_1, t_2, \ldots, t_{n-1})
 $$
@@ -66,13 +71,15 @@ Los métodos difieren, fundamentalmente, en la forma en la que se estima la prob
 $$
 P(t_n|t_{n-2}, t_{n-1})=\frac{F(t_{n-2}, t_{n-1}, t_n)}{F(t_{n-2},t_{n-1})}
 $$
-siendo $F(t_{n-2}, t_{n-1}, t_n)$ el número de veces que ocurre el trigrama $t_{n-2}, t_{n-1}, t_n$ dentro del corpus usado como entrenamiento y $F(t_{n-2},t_{n-1})$ el número de veces que ocurre el bigrama $t_{n-2}, t_{n-1}$.
+siendo $F(t_{n-2}, t_{n-1}, t_n)$ el número de veces que ocurre el trigrama $t_{n-2}, t_{n-1}, t_n$ dentro del corpus usado como entrenamiento y $F(t_{n-2},t_{n-1})$ el número de veces que ocurre el bigrama $t_{n-2}, t_{n-1}$. Las expresiones anteriores se han desarrollado suponiendo un modelo de Markov de segundo orden, aunque no el procedimiento sería análogo para el caso de un modelo de Markov de orden $n$.
 
-Sin embargo, el modelo **TreeTagger** estima esas probabilidades de transición con un **árbol de decisión binario**. Los árboles de decisión son modelos muy utilizados en el área de la minería de datos por su sencillez y porque suelen permitir una interpretación explicativa de cómo se comportan las variables que intervienen en el modelo. Consisten en una serie de reglas que siguen una estructura jerárquica donde se parte de un nodo inicial o raíz y se va particionando siguiendo una estructura de árbol como puede verse en la figura BLA. La probabilidad de un trigrama (en general, un ngrama) se determina siguiendo el camino correspondiente en el árbol de decisión construido hasta que se llega a una hoja (nodo terminal).
+Sin embargo, el modelo [**TreeTagger**](http://www.cis.uni-muenchen.de/~schmid/tools/TreeTagger/) estima estas probabilidades de transición con un **árbol de decisión binario**. Los árboles de decisión son modelos muy utilizados en el área de la minería de datos por su sencillez y porque suelen permitir una interpretación explicativa de cómo se comportan las variables que intervienen en el modelo. Consisten en una serie de reglas que siguen una estructura jerárquica donde se parte de un nodo inicial o raíz y se va particionando siguiendo una estructura de árbol como puede verse en la siguiente figura ![](img/arbol.png)
 
-Por ejemplo, vamos a seguir la estructura de árbol propuesta en la figura BLA para hallar la probabilidad de que un nombre sea precedido por un determinante y un adjetivo $P(NN|DET,ADJ)$. El nodo raíz pregunta si la etiqueta $t_{n-1}$ es un adjetivo que en nuestro caso es correcto por lo que seguimos la rama que se corresponde con *yes*. La siguiente pregunta es si $t_{n-2}$ es un determinante que, al serlo, seguimos la rama *yes* que nos lleva a un nodo terminal, especificando que la probabilidad de obtener un nombre dadas las condiciones anteriores es del $0.7$.
+La probabilidad de un trigrama (en general, un $n$-grama) se determina siguiendo el camino correspondiente en el árbol de decisión construido hasta que se llega a una hoja (nodo terminal).
 
-En la web http://www.cis.uni-muenchen.de/~schmid/tools/TreeTaggerse pueden encontrar todos los detalles acerca de este método de POS tagging así como descargar el programa que permite hacer este etiquetado.
+Por ejemplo, vamos a seguir la estructura de árbol propuesta en la figura anterior para hallar la probabilidad de que un nombre ($NN$) sea precedido por un determinante ($DET$) y un adjetivo ($ADJ$), es decir,  $P(NN|DET,ADJ)$. El nodo raíz pregunta si la etiqueta $t_{n-1}$ es un adjetivo que, en nuestro caso, es así por lo que seguimos la rama que se corresponde con *yes*. La siguiente pregunta es si $t_{n-2}$ es un determinante con lo que seguimos la rama *yes* que nos lleva a un nodo terminal, especificando que la probabilidad de obtener un nombre dadas las condiciones anteriores es del $0.7$.
+
+
 
 # Stanford POS Tagger
 
