@@ -1,0 +1,35 @@
+---
+title: "Tarea del tema 5: estudio de diferentes representaciones vectoriales"
+author: "Pablo Hidalgo García"
+output: html_notebook
+---
+
+El corpus está compuesto por diversas noticias aparecidas en periódicos de la huelga feminista realizada durante el 8 de marzo.
+
+El software elegido para la realización de la práctica ha sido R.
+
+# Análisis léxico
+
+Para la selección de rasgos, se ha elegido como separador el espacio en blanco. Además, se ha realizado los siguientes tratamientos:
+
+- **Eliminación de signos de puntuación**: se han eliminado los signos de puntuación habituales como ",", ".", "¿", "?", etcétera.
+- **Eliminación de urls**: se han eliminado aquellos rasgos que contienen "http"
+- **Eliminación de números**: se han eliminado rasgos con más de 5 dígitos ya que se consideran que no formarían parte del texto sino que podrían tratarse de identificadores del html.
+
+
+El paquete `tm` de R, contiene una lista de *stop-words* en castellano. A continuación se muestran las 20 primeras de la lista
+
+```{r}
+tm::stopwords("es")[1:20]
+```
+
+
+Estas *stop-words* han sido eliminadas.
+
+También disponemos en este paquete de la función `stemDocument` que incorpora el algoritmo de Porter para diversos idiomas, entre ellos el castellano. 
+
+Las funciones de pesado utilizadas son:
+
+- Frecuencia total del término, que se trata de una medida global.
+- **Term frequency-inverse document frequency (TF-IDF)** que se trata de una medida local que trata de restarle importancia a aquellas palabras que son demasiado comunes para incrementar la importancia de aquellas que puedan ser relevantes para la discriminación entre textos.
+

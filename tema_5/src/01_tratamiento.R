@@ -9,20 +9,24 @@ text_df <- data_frame(id = 1:length(docs),
 
 
 # Tokenization ------------------------------------------------------------
-
 rasgos <- text_df %>% 
-  unnest_tokens(word, text)
+  unnest_tokens(word, text) 
 
+rasgos <- rasgos[!str_detect(rasgos$word, "http"),]
+rasgos <- rasgos[grep(pattern = "[1-9]{5,}", 
+                      x = rasgos$word, 
+                      invert = TRUE),
+                 ]
+
+rasgos$word <- removePunctuation(rasgos$word)
 
 
 # Drop stop words ---------------------------------------------------------
-
 rasgos <- rasgos %>% 
   filter(!word %in% stopwords("es"))
 
 
 # Stemming ----------------------------------------------------------------
-
 rasgos <- rasgos %>% 
   mutate(word_stem = stemDocument(word,
                                   language = "spanish")
